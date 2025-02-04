@@ -119,11 +119,13 @@ body.dark-mode .hour-label {
     left: 50px;
     right: 10px;
     color: white;
-    padding: 2px 5px;
+    padding: 10px 20px;
     cursor: move;
     border-radius: 3px;
     box-sizing: border-box;
     overflow: hidden;
+    font-size: 1.3rem;
+    text-align: center;
 }
 
 /* Contador de horas disponibles */
