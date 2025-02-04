@@ -3,13 +3,15 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    /* Sin scroll global */
-    height: 100vh;
+    /* overflow: hidden; */
+    height: 150vh;
     background-color: #fdfdfd;
     color: #333;
     transition: background-color 0.3s, color 0.3s;
 }
+body::-webkit-scrollbar {
+    width: 10px;
+  }
 
 body.dark-mode {
     background-color: #222;
@@ -60,13 +62,11 @@ body.dark-mode {
 
 .schedule {
     position: relative;
-    height: 80vh;
-    /* 80% de la altura de la ventana */
+    height: 62.53vw;
     border: 1px solid #ccc;
     background: #fdfdfd;
     margin-bottom: 10px;
     overflow-y: auto;
-    /* Scroll solo en esta área */
 }
 
 body.dark-mode .schedule {
@@ -150,6 +150,7 @@ body.dark-mode .sidebar {
 
 .activity-form {
     margin-bottom: 20px;
+    position: fixed;
 }
 
 .activity-form input,
@@ -170,24 +171,22 @@ body.dark-mode .sidebar {
     flex: 1;
     overflow-y: auto;
     border-top: 1px solid #ccc;
-    padding-top: 40px;
+    padding-top: 20px;
     max-height: 50vh;
-    position: relative;
+    position: fixed;
+    top: 320px;
+    width: 25%;
 }
 
 .activity-list h3 {
     margin-top: 0;
-    position: absolute;
-    top: 10px;
-    right: 50%;
-    transform: translateX(50%);
+    text-align: center;
 }
 
 /* Actividades en la lista (arrastrables) */
 .activity {
-    background-color: #4CAF50;
     color: white;
-    padding: 5px;
+    padding: 10px 20px;
     margin: 5px 0;
     cursor: grab;
     border-radius: 3px;
