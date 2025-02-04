@@ -1,0 +1,195 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Sin scroll global */
+    height: 100vh;
+    background-color: #fdfdfd;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  body.dark-mode {
+    background-color: #222;
+    color: #eee;
+  }
+  .container {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* Controles globales */
+  #controls {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    z-index: 1100;
+  }
+  #controls button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .redBtn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+  }
+  .greenBtn {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+  }
+  
+  /* Sección del horario */
+  .schedule-container {
+    flex: 3;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .schedule {
+    position: relative;
+    height: 80vh; /* 80% de la altura de la ventana */
+    border: 1px solid #ccc;
+    background: #fdfdfd;
+    margin-bottom: 10px;
+    overflow-y: auto;  /* Scroll solo en esta área */
+  }
+  body.dark-mode .schedule {
+    background: #333;
+    border-color: #555;
+  }
+  
+  /* Líneas de la cuadrícula horaria y etiquetas */
+  .hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed #ddd;
+    pointer-events: none;
+  }
+
+  body.dark-mode .hour-label {
+    color: #ffffff;
+    background: #333;
+  }
+
+  .hour-label {
+    position: absolute;
+    left: 5px;
+    top: -8px;
+    background: inherit;
+    padding: 0 3px;
+    font-size: 12px;
+    color: #555;
+  }
+  
+  /* Indicador de hora actual */
+  #timeIndicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ff4081;
+    z-index: 500;
+    pointer-events: none;
+  }
+  
+  /* Actividad programada en el horario */
+  .scheduled-activity {
+    position: absolute;
+    left: 50px;
+    right: 10px;
+    color: white;
+    padding: 2px 5px;
+    cursor: move;
+    border-radius: 3px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  /* Contador de horas disponibles */
+  #availableHours {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    font-weight: bold;
+  }
+  body.dark-mode #availableHours {
+    border-color: #555;
+  }
+  
+  /* Sección lateral */
+  .sidebar {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+  }
+  body.dark-mode .sidebar {
+    border-color: #555;
+  }
+  .activity-form {
+    margin-bottom: 20px;
+  }
+  .activity-form input,
+  .activity-form textarea,
+  .activity-form button {
+    padding: 5px;
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .activity-form textarea {
+    resize: vertical;
+  }
+  
+  /* Lista de actividades */
+  .activity-list {
+    flex: 1;
+    overflow-y: auto;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  .activity-list h3 {
+    margin-top: 0;
+  }
+  
+  /* Actividades en la lista (arrastrables) */
+  .activity {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px;
+    margin: 5px 0;
+    cursor: grab;
+    border-radius: 3px;
+  }
+  .activity.dragging {
+    opacity: 0.5;
+  }
+  
+  /* Menú contextual */
+  .context-menu {
+    position: absolute;
+    display: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  }
+  .context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+  }
+  .context-menu li {
+    padding: 5px 15px;
+    cursor: pointer;
+  }
+  .context-menu li:hover {
+    background: #eee;
+  }
+  
