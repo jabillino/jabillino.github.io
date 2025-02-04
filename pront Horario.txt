@@ -1,0 +1,43 @@
+Quiero que me generes un proyecto web (separado en archivos HTML, CSS y JavaScript) de un "Horario Interactivo" con las siguientes funcionalidades y requerimientos:
+
+Interfaz Básica:
+Debe tener un área central que represente el horario del día, dividido en 24 franjas horarias (cada franja de 50px, es decir, la cuadrícula interna tendrá 1200px de altura).
+El área del horario visible debe ocupar el 80% de la altura de la ventana (80vh) y tener scroll interno (sin que se mueva el body).
+A la derecha debe haber una sección lateral (sidebar) para la creación y listado de actividades.
+Creación y Gestión de Actividades en el Sidebar:
+En el sidebar se debe poder crear una nueva actividad ingresando:
+Nombre.
+Duración (en horas, entre 1 y 24).
+Descripción (opcional).
+Selección de color mediante un input de tipo color.
+La actividad creada debe aparecer en la lista del sidebar con el color seleccionado (mostrándose su nombre, duración y descripción, si se ingresa).
+Las actividades en el sidebar deben ser arrastrables (drag and drop) para programarlas en el horario.
+Al hacer clic derecho sobre una actividad del sidebar debe desplegarse un menú contextual con las opciones:
+Editar: Permitir cambiar nombre, duración y descripción. Si la actividad ya fue programada en el horario, se deben eliminar todas sus instancias para evitar conflictos.
+Eliminar: Eliminar la actividad del sidebar y, además, eliminar todas sus instancias programadas en el horario.
+Programación de Actividades en el Horario:
+El área central (horario) muestra la cuadrícula horaria con etiquetas (00:00, 01:00, …, 23:00).
+Se debe permitir arrastrar una actividad del sidebar al horario para programarla:
+La posición vertical en la que se suelte determinará la hora de inicio (se debe tener en cuenta el scroll interno del contenedor para calcular correctamente la posición).
+La actividad, según su duración, debe ocupar los bloques correspondientes en la cuadrícula.
+Si la actividad programada se extiende más allá de la medianoche:
+Se debe “dividir” la visualización en dos partes: la primera parte se muestra desde la hora de inicio hasta las 24:00 y la segunda parte se muestra desde 00:00 hasta completar la duración total.
+Las actividades programadas deben ser reubicables: se debe poder arrastrar (drag and drop) una actividad ya colocada para cambiar su hora de inicio. Al reubicarlas se debe verificar que no se solapen con otras actividades.
+Al hacer clic derecho sobre una actividad programada (ya sea que se muestre como una única parte o dividida en dos) debe desplegarse un menú contextual con las opciones:
+Editar: Permitir modificar el nombre, duración y descripción de esa instancia. Al editar, se debe verificar que la nueva duración no genere conflictos (solapamientos o que se salga del horario).
+Eliminar: Eliminar esa actividad programada.
+Indicador de Hora Actual:
+Se debe incluir una barra de color llamativo (por ejemplo, de color rosa) que se mueva a lo largo del horario, indicando la hora actual.
+Este indicador se debe actualizar cada segundo y posicionarse correctamente según la hora actual (calculado a partir de horas, minutos y segundos).
+Contador de Horas Disponibles:
+Debe mostrarse en la parte inferior del área del horario un contador que indique las “Horas disponibles” (24 menos la suma de las duraciones de las actividades programadas).
+Controles Globales Adicionales:
+Un botón para alternar entre modo oscuro y modo claro. Al pulsarlo, se debe cambiar el estilo general de la página (fondo, colores de textos, etc.).
+Un botón rojo para eliminar todas las actividades: tanto las que están en el sidebar como las programadas en el horario.
+Un botón verde para guardar el horario. Al pulsarlo, se debe generar una imagen del horario (por ejemplo, usando la librería html2canvas) y permitir al usuario descargar la imagen.
+Consideraciones Técnicas y de Diseño:
+Los archivos deben estar separados en: index.html, styles.css y script.js.
+El diseño debe ser responsivo y tener transiciones suaves (por ejemplo, al cambiar entre modo oscuro y claro).
+Todas las funcionalidades de arrastrar (drag and drop) deben funcionar correctamente incluso si el contenedor del horario ha sido scrolleado.
+Los cambios en la edición de actividades en el sidebar deben reflejarse en el listado (incluyendo color) y, si la actividad ya fue programada, se deben eliminar las instancias para evitar errores.
+Genera el proyecto completo que cumpla con todos estos requerimientos.

@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Horario Interactivo</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Horario Interactivo</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <!-- Controles globales -->
-  <div id="controls">
-    <button id="toggleModeBtn">Modo Oscuro</button>
-    <button id="deleteAllBtn" class="redBtn">Eliminar Todas</button>
-    <button id="saveScheduleBtn" class="greenBtn">Guardar Horario</button>
-  </div>
-
-  <div class="container">
-    <!-- Sección del horario -->
-    <div class="schedule-container">
-      <h2>Horario</h2>
-      <!-- Contenedor del horario (área de drop) -->
-      <div id="scheduleContainer" class="schedule">
-        <!-- La cuadrícula interna se genera con JS -->
-        <!-- Indicador de hora actual -->
-        <div id="timeIndicator"></div>
-      </div>
-      <div id="availableHours">Horas disponibles: 24</div>
-    </div>
-
-    <!-- Sección lateral para crear y listar actividades -->
-    <div class="sidebar">
-      <div class="activity-form">
-        <h3>Nueva Actividad</h3>
-        <input type="text" id="activityName" placeholder="Nombre de la actividad">
-        <input type="number" id="activityDuration" placeholder="Duración (horas)" min="1" max="24">
-        <!-- Campo para descripción -->
-        <textarea id="activityDescription" placeholder="Descripción (opcional)"></textarea>
-        <!-- Input para seleccionar color -->
-        <label for="activityColor">Color:</label>
-        <input type="color" id="activityColor" value="#4CAF50">
-        <button id="addActivityBtn">Agregar Actividad</button>
-      </div>
-      <div class="activity-list">
-        <h3>Lista de Actividades</h3>
-        <div id="activityList">
-          <!-- Se agregarán las actividades creadas -->
+    <!-- Controles globales -->
+    <div class="container">
+        <!-- Sección del horario -->
+        <div class="schedule-container">
+            <h2>Horario</h2>
+            <!-- Contenedor del horario (área de drop) -->
+            <div id="scheduleContainer" class="schedule">
+                <!-- La cuadrícula interna se genera con JS -->
+                <!-- Indicador de hora actual -->
+                <div id="timeIndicator"></div>
+            </div>
+            <div id="availableHours">Horas disponibles: 24</div>
+            <div id="controls">
+                <button id="toggleModeBtn">Modo Oscuro</button>
+                <button id="deleteAllBtn" class="redBtn">Eliminar Todas</button>
+                <button id="saveScheduleBtn" class="greenBtn">Guardar Horario</button>
+            </div>
         </div>
-      </div>
+        <!-- Sección lateral para crear y listar actividades -->
+        <div class="sidebar">
+            <div class="activity-form">
+                <h3>Nueva Actividad</h3>
+                <input type="text" id="activityName" placeholder="Nombre de la actividad">
+                <input type="number" id="activityDuration" placeholder="Duración (horas)" min="1" max="24">
+                <!-- Campo para descripción -->
+                <textarea id="activityDescription" placeholder="Descripción (opcional)"></textarea>
+                <!-- Input para seleccionar color -->
+                <label for="activityColor">Color:</label>
+                <input type="color" id="activityColor" value="#4CAF50">
+                <button id="addActivityBtn">Agregar Actividad</button>
+            </div>
+            <div class="activity-list">
+                <h3>Lista de Actividades</h3>
+                <div id="activityList">
+                    <!-- Se agregarán las actividades creadas -->
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Menú contextual (para sidebar y actividades programadas) -->
-  <div id="contextMenu" class="context-menu">
-    <ul>
-      <li id="editOption">Editar</li>
-      <li id="deleteOption">Eliminar</li>
-    </ul>
-  </div>
+    <!-- Menú contextual (para sidebar y actividades programadas) -->
+    <div id="contextMenu" class="context-menu">
+        <ul>
+            <li id="editOption">Editar</li>
+            <li id="deleteOption">Eliminar</li>
+        </ul>
+    </div>
 
-  <!-- Librería html2canvas para guardar el horario como imagen -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaPH3O1IttIhWsuCjvcZHqtQGXRGEWkMBgXK4Uflw8ixGBACnIjmrhZvGSt7abKcR2QOX66Tv72WElx+f+rYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="script.js"></script>
+    <!-- Librería html2canvas para guardar el horario como imagen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaPH3O1IttIhWsuCjvcZHqtQGXRGEWkMBgXK4Uflw8ixGBACnIjmrhZvGSt7abKcR2QOX66Tv72WElx+f+rYQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
