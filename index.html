@@ -31,12 +31,12 @@
             <div class="activity-form">
                 <h3>Nueva Actividad</h3>
                 <input type="text" id="activityName" placeholder="Nombre de la actividad">
-                <input type="number" id="activityDuration" placeholder="Duración (horas)" min="1" max="24">
+                <input type="number" id="activityDuration" min="0.5" max="24" step="0.5" placeholder="Duración en horas">
                 <!-- Campo para descripción -->
                 <textarea id="activityDescription" placeholder="Descripción (opcional)"></textarea>
                 <!-- Input para seleccionar color -->
                 <label for="activityColor">Color:</label>
-                <input type="color" id="activityColor" value="#4CAF50">
+                <input type="color" id="activityColor" value="#065676">
                 <button id="addActivityBtn">Agregar Actividad</button>
             </div>
             <div class="activity-list">

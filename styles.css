@@ -1,10 +1,8 @@
 /* Estilos generales */
-
 body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    /* overflow: hidden; */
     height: 150vh;
     background-color: #fdfdfd;
     color: #333;
@@ -12,7 +10,7 @@ body {
 }
 body::-webkit-scrollbar {
     width: 10px;
-  }
+}
 
 body.dark-mode {
     background-color: #222;
@@ -90,9 +88,12 @@ body.dark-mode .schedule {
     pointer-events: none;
 }
 
-body.dark-mode .hour-label {
-    color: #ffffff;
-    background: #333;
+.half-hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed #eee;
+    pointer-events: none;
 }
 
 .hour-label {
@@ -104,6 +105,25 @@ body.dark-mode .hour-label {
     font-size: 12px;
     color: #555;
 }
+
+.half-hour-label {
+    position: absolute;
+    left: 5px;
+    top: -8px;
+    background: inherit;
+    padding: 0 3px;
+    font-size: 12px;
+    color: #999;
+}
+
+body.dark-mode .hour-label {
+    color: #ffffff;
+    background: #333;
+}
+
+body.dark-mode .half-hour-label {
+    color: #949494;
+    background: #333;}
 
 /* Indicador de hora actual */
 #timeIndicator {

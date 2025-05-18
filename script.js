@@ -26,17 +26,22 @@ function updateAvailableHours() {
   availableHoursElem.textContent = 'Horas disponibles: ' + remaining;
 }
 
-// Dibuja la cuadrícula horaria (24 horas) en el contenedor
+// Dibuja la cuadrícula horaria (24 horas) mostrando también las medias horas.
 function drawGrid() {
-  for (let i = 0; i < 24; i++) {
+  const halfSlotHeight = slotHeight / 2; // 25px por media hora
+  // 24 horas * 2 segmentos = 48 segmentos de 30 minutos
+  for (let i = 0; i < 48; i++) {
     const line = document.createElement('div');
-    line.classList.add('hour-line');
-    line.style.top = (i * slotHeight) + 'px';
-    line.style.height = slotHeight + 'px';
+    const isFullHour = (i % 2 === 0);
+    line.classList.add(isFullHour ? 'hour-line' : 'half-hour-line');
+    line.style.top = (i * halfSlotHeight) + 'px';
+    line.style.height = halfSlotHeight + 'px';
 
     const label = document.createElement('div');
-    label.classList.add('hour-label');
-    label.textContent = (i < 10 ? '0' + i : i) + ':00';
+    label.classList.add(isFullHour ? 'hour-label' : 'half-hour-label');
+    const hour = Math.floor(i / 2);
+    const minute = (i % 2) * 30;
+    label.textContent = (hour < 10 ? '0' + hour : hour) + ':' + (minute === 0 ? '00' : minute);
     line.appendChild(label);
     scheduleContainer.appendChild(line);
   }
@@ -70,13 +75,10 @@ function intervalsOverlap(intervals1, intervals2) {
 // ==========================================
 // INDICADOR DE HORA ACTUAL
 // ==========================================
-
 const timeIndicator = document.getElementById('timeIndicator');
 function updateTimeIndicator() {
   const now = new Date();
-  // Convertir la hora actual a "hora en el horario" (0 a 24)
-  const currentHour = now.getHours() + now.getMinutes()/60 + now.getSeconds()/3600;
-  // Calcular el "top" en base a slotHeight (la cuadrícula interna tiene 24 horas = 1200px)
+  const currentHour = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
   const topPos = currentHour * slotHeight;
   timeIndicator.style.top = topPos + 'px';
 }
@@ -96,7 +98,8 @@ scheduleContainer.addEventListener('drop', (e) => {
   e.preventDefault();
   const rect = scheduleContainer.getBoundingClientRect();
   const offsetY = e.clientY - rect.top + scheduleContainer.scrollTop;
-  const newStartHour = Math.floor(offsetY / slotHeight);
+  // Ahora se calcula el inicio en incrementos de 0.5:
+  const newStartHour = Math.floor(offsetY / (slotHeight / 2)) / 2;
 
   const transferId = e.dataTransfer.getData('text/plain');
   let draggedElem = document.getElementById(transferId);
@@ -117,7 +120,8 @@ scheduleContainer.addEventListener('drop', (e) => {
 
 // Programa una actividad nueva en el horario
 function scheduleNewActivity(activityElem, startHour) {
-  const duration = parseInt(activityElem.dataset.duration);
+  // Usar parseFloat para admitir duraciones fraccionarias (ej. 8.5)
+  const duration = parseFloat(activityElem.dataset.duration);
   const color = activityElem.dataset.color || "#4CAF50";
   const description = activityElem.dataset.description || "";
   const newIntervals = getActivityIntervals(startHour, duration);
@@ -158,11 +162,11 @@ function scheduleNewActivity(activityElem, startHour) {
     elementPart1.setAttribute('draggable', 'true');
     addScheduledDragEvents(elementPart1);
     scheduleContainer.appendChild(elementPart1);
-    
+
     elementPart2 = document.createElement('div');
     elementPart2.classList.add('scheduled-activity');
     elementPart2.textContent = activityElem.textContent;
-    elementPart2.style.top = 0 + 'px';
+    elementPart2.style.top = '0px';
     elementPart2.style.height = (part2Duration * slotHeight - 4) + 'px';
     elementPart2.style.backgroundColor = color;
     elementPart2.dataset.containerId = containerId;
@@ -170,7 +174,7 @@ function scheduleNewActivity(activityElem, startHour) {
     addScheduledDragEvents(elementPart2);
     scheduleContainer.appendChild(elementPart2);
   }
-  
+
   scheduledActivities.push({
     id: containerId,
     start: startHour,
@@ -211,13 +215,13 @@ function repositionScheduledActivity(containerId, newStartHour) {
     currentAct.elementPart1.style.top = (newStartHour * slotHeight) + 'px';
     currentAct.elementPart1.style.height = (part1Duration * slotHeight - 4) + 'px';
     if (currentAct.elementPart2) {
-      currentAct.elementPart2.style.top = 0 + 'px';
+      currentAct.elementPart2.style.top = '0px';
       currentAct.elementPart2.style.height = (part2Duration * slotHeight - 4) + 'px';
     } else {
       const newElem2 = document.createElement('div');
       newElem2.classList.add('scheduled-activity');
       newElem2.textContent = currentAct.elementPart1.textContent;
-      newElem2.style.top = 0 + 'px';
+      newElem2.style.top = '0px';
       newElem2.style.height = (part2Duration * slotHeight - 4) + 'px';
       newElem2.style.backgroundColor = currentAct.color;
       newElem2.dataset.containerId = containerId;
@@ -246,6 +250,7 @@ function addScheduledDragEvents(elem) {
   });
 }
 
+
 // ==========================================
 // CREACIÓN DE ACTIVIDADES EN EL SIDEBAR
 // ==========================================
@@ -255,27 +260,35 @@ let activityCount = 0;
 
 addActivityBtn.addEventListener('click', () => {
   const name = document.getElementById('activityName').value.trim();
-  const duration = parseInt(document.getElementById('activityDuration').value);
+  // Usamos parseFloat para soportar medias horas
+  const duration = parseFloat(document.getElementById('activityDuration').value);
   const description = document.getElementById('activityDescription').value.trim();
   const color = document.getElementById('activityColor').value;
-  
-  if (!name || isNaN(duration) || duration < 1 || duration > 24) {
-    alert('Por favor, ingresa un nombre válido y una duración entre 1 y 24.');
+
+  // Permitimos duraciones entre 0.5 y 24 horas (puedes ajustar el mínimo si lo deseas)
+  if (!name || isNaN(duration) || duration < 0.5 || duration > 24) {
+    alert('Por favor, ingresa un nombre válido y una duración entre 0.5 y 24 horas.');
     return;
   }
-  
+
+  // Formatear la duración para mostrarla en formato "HH:MM"
+  const formattedDuration = (duration % 1 === 0)
+    ? duration + ":00"
+    : Math.floor(duration) + ":30";
+
   // Crear el elemento del sidebar (actividad arrastrable)
   const activityElem = document.createElement('div');
   activityElem.classList.add('activity');
-  activityElem.textContent = name + ' (' + duration + 'h)' + (description ? ' - ' + description : '');
+  activityElem.textContent = name + ' (' + formattedDuration + 'h)' + (description ? ' - ' + description : '');
   activityElem.id = 'activity-' + activityCount++;
+  // Guardamos la duración como valor decimal (8.5, 9, etc.)
   activityElem.dataset.duration = duration;
   activityElem.dataset.color = color;
   activityElem.dataset.description = description;
-  // Mostrar el color seleccionado en el fondo de la actividad (puedes ajustar según tu diseño)
+  // Mostrar el color seleccionado en el fondo de la actividad
   activityElem.style.background = `linear-gradient(90deg, ${color} 3%, #333 3%)`;
-  ;
-  
+  activityElem.style.border = '1px solid #333';
+
   activityElem.setAttribute('draggable', 'true');
   activityElem.addEventListener('dragstart', (e) => {
     activityElem.classList.add('dragging');
@@ -288,13 +301,14 @@ addActivityBtn.addEventListener('click', () => {
     e.preventDefault();
     showContextMenu(e.pageX, e.pageY, activityElem, "sidebar");
   });
-  
+
   activityList.appendChild(activityElem);
+  // Limpiar los campos de entrada
   document.getElementById('activityName').value = '';
   document.getElementById('activityDuration').value = '';
   document.getElementById('activityDescription').value = '';
 });
-  
+
 // ==========================================
 // MENÚ CONTEXTUAL (para Sidebar y Horario)
 // ==========================================
@@ -305,13 +319,13 @@ function showContextMenu(x, y, targetElem, type) {
   contextMenu.style.left = x + 'px';
   contextMenu.style.top = y + 'px';
 }
-  
+
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.context-menu')) {
     contextMenu.style.display = 'none';
   }
 });
-  
+
 // Opción Editar
 document.getElementById('editOption').addEventListener('click', () => {
   if (!currentContextElem) return;
@@ -323,14 +337,17 @@ document.getElementById('editOption').addEventListener('click', () => {
     const newName = prompt('Nuevo nombre:', currentName);
     if (newName === null) return;
     const newDuration = prompt('Nueva duración (horas):', currentDuration);
-    const durationNum = parseInt(newDuration);
+    const durationNum = parseFloat(newDuration);
     if (!newName.trim() || isNaN(durationNum) || durationNum < 1 || durationNum > 24) {
       alert('Datos inválidos.');
       return;
     }
     const newDescription = prompt('Nueva descripción (opcional):', currentContextElem.dataset.description) || "";
-    currentContextElem.textContent = newName + ' (' + durationNum + 'h)' + (newDescription ? ' - ' + newDescription : '');
-    currentContextElem.dataset.duration = durationNum;
+    const hours = parseInt(durationNum);
+    const minutes = (durationNum - hours) >= 0.5 ? '30' : '00';
+    const descriptionText = newDescription ? ` - ${newDescription}` : '';
+    currentContextElem.textContent = `${newName} (${hours}:${minutes}h)${descriptionText}`;
+    currentContextElem.dataset.duration = (durationNum - hours) >= 0.5 ? (hours + 0.5) : hours;
     currentContextElem.dataset.description = newDescription;
     contextMenu.style.display = 'none';
     // Eliminar todas las instancias programadas de esta actividad (si existen)
@@ -354,7 +371,7 @@ document.getElementById('editOption').addEventListener('click', () => {
     const newName = prompt('Nuevo nombre:', currentName);
     if (newName === null) return;
     const newDuration = prompt('Nueva duración (horas):', actRecord.duration);
-    const durationNum = parseInt(newDuration);
+    const durationNum = parseFloat(newDuration);
     if (!newName.trim() || isNaN(durationNum) || durationNum < 1 || durationNum > 24) {
       alert('Datos inválidos.');
       return;
@@ -405,7 +422,7 @@ document.getElementById('editOption').addEventListener('click', () => {
     contextMenu.style.display = 'none';
   }
 });
-  
+
 // Opción Eliminar en el menú contextual
 document.getElementById('deleteOption').addEventListener('click', () => {
   if (!currentContextElem) return;
@@ -440,7 +457,7 @@ document.getElementById('deleteOption').addEventListener('click', () => {
     contextMenu.style.display = 'none';
   }
 });
-  
+
 // ==========================================
 // BOTONES DE CONTROLES GLOBALES
 // ==========================================
@@ -470,7 +487,6 @@ deleteAllBtn.addEventListener('click', () => {
 });
 
 // Botón para guardar el horario como imagen
-// Botón para guardar el horario como imagen
 const saveScheduleBtn = document.getElementById('saveScheduleBtn');
 saveScheduleBtn.addEventListener('click', () => {
   // Usamos setTimeout para esperar un poco antes de hacer la captura
@@ -482,12 +498,12 @@ saveScheduleBtn.addEventListener('click', () => {
     // Usamos html2canvas para capturar el contenedor del horario
     html2canvas(scheduleContainer, {
       scrollY: -window.scrollY,  // Ajuste para capturar contenido fuera de vista
-      scrollX: 0,  // Aseguramos que el desplazamiento horizontal esté en 0
-      useCORS: true,  // Permite capturar imágenes externas si es necesario
-      width: scheduleWidth,  // Ajuste del tamaño
-      height: scheduleHeight,  // Ajuste del tamaño
-      x: 0,  // Ajuste para asegurarse que se inicie desde la parte superior
-      y: 0,  // Ajuste para asegurarse que se inicie desde la parte izquierda
+      scrollX: 0,
+      useCORS: true,
+      width: scheduleWidth,
+      height: scheduleHeight,
+      x: 0,
+      y: 0,
     }).then(canvas => {
       // Convertir el canvas a imagen y forzar descarga
       const imageData = canvas.toDataURL("image/png");
@@ -496,8 +512,5 @@ saveScheduleBtn.addEventListener('click', () => {
       link.download = 'horario.png';
       link.click();
     });
-  }, 500);  // Espera medio segundo para asegurarse de que todo se haya renderizado
+  }, 500);
 });
-
-
-
